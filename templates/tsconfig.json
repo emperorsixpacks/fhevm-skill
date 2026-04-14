@@ -1,0 +1,25 @@
+{
+  "compilerOptions": {
+    "target": "es2022",
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "strict": true,
+    "esModuleInterop": true,
+    "resolveJsonModule": true,
+    "declaration": true,
+    "declarationMap": true,
+    "sourceMap": true,
+    "outDir": "./dist",
+    "rootDir": ".",
+    "forceConsistentCasingInFileNames": true,
+    "skipLibCheck": true
+  },
+  "include": [
+    "test/**/*.ts",
+    "deploy/**/*.ts",
+    "scripts/**/*.ts",
+    "tasks/**/*.ts",
+    "hardhat.config.ts"
+  ],
+  "files": ["./hardhat.config.ts"]
+}
