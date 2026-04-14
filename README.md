@@ -23,7 +23,7 @@ Works with **Kiro**, **Claude**, **Cursor**, **Windsurf**, **Copilot**, and any 
 Start by cloning the repo:
 
 ```bash
-git clone https://github.com/your-org/fhevm-skill
+git clone https://github.com/emperorsixpacks/fhevm-skill.git
 ```
 
 Then follow the setup for your agent below.
