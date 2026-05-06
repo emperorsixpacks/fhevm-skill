@@ -59,16 +59,14 @@ program
 program.parse();
 
 function resolveSkillSrc(): string {
-  // When published: cli/dist/index.js → go up to repo root
-  // Repo layout: SKILL.md lives two dirs above dist/
   const candidates = [
-    path.resolve(__dirname, "../../"),   // published: cli/dist → cli → repo root
-    path.resolve(__dirname, "../../../"), // fallback
-    process.cwd(),
+    path.resolve(__dirname, "../skill"),   // published: dist/index.js → skill/
+    path.resolve(__dirname, "../../"),     // local dev: cli/dist → cli → repo root
+    path.resolve(__dirname, "../../../"),  // fallback
   ];
   for (const c of candidates) {
     if (fs.existsSync(path.join(c, "SKILL.md"))) return c;
   }
-  console.error(pc.red("Could not locate SKILL.md. Run from the fhevm-skill repo root."));
+  console.error(pc.red("Could not locate SKILL.md. Try reinstalling: npx fhevm-setup@latest"));
   process.exit(1);
 }
