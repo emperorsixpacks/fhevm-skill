@@ -120,6 +120,49 @@ Deep reference lives in separate files. **Only load what you need:**
 
 ---
 
+## FHE gas costs — always keep in mind
+
+Every FHE operation costs 50,000–300,000 gas. A function with 5 FHE ops
+costs ~500K–1M gas. Design for the minimum number of encrypted operations:
+- Prefer scalar overloads: `FHE.add(enc, 5)` over `FHE.add(enc, FHE.asEuint32(5))`
+- Never loop over encrypted values — design for O(1) FHE ops per transaction
+- Batch plaintext logic; only encrypt what must stay private
+
+---
+
+## Common errors → fixes (quick reference)
+
+| Error / Symptom | Cause | Fix |
+|---|---|---|
+| `ebool is not implicitly convertible to bool` | `if`/`require` on encrypted value | Use `FHE.select()` |
+| `Operator + not compatible with euint256` | `euint256` has no arithmetic | Use `euint128` or smaller |
+| `Identifier not found: TFHE` | Deprecated library | Replace with `FHE`, update import |
+| `externalEuint64 not convertible to euint64` | Missing `fromExternal` | `FHE.fromExternal(input, proof)` |
+| Contract reverts on 2nd call to same state | Missing `FHE.allowThis()` | Add after every new ciphertext |
+| User decrypt returns empty/null | Missing `FHE.allow(handle, user)` | Add after every state update |
+| Cross-contract encrypted call fails | Missing `allowTransient` | `FHE.allowTransient(handle, targetContract)` |
+| Transaction reverts, no message | Wrong contract address in proof | Re-encrypt with correct `contractAddress` |
+| `evmVersion` compile error | Wrong EVM target | Set `evmVersion: "cancun"` in hardhat config |
+| FHE ops fail on deploy, not locally | Missing `ZamaEthereumConfig` | Inherit it in every contract |
+| WASM load failure in browser | Missing COOP/COEP headers | Add headers in `vite.config.ts` |
+| `randEuintX(N)` wrong results | N is not a power of 2 | Use 2, 4, 8, 16, 32, 64, 128, 256... |
+
+> Full details with code examples: `references/troubleshooting.md`
+
+---
+
+## Note for Claude / API agents (no file access)
+
+If you are an agent that only received `SKILL.md` (no access to `references/`),
+the cheatsheet and anti-patterns above cover 80% of use cases. For the remaining
+20%, the key rules are:
+- **ACL**: `FHE.allowThis()` after every new ciphertext; `FHE.allow(h, user)` for every user
+- **Inputs**: always `externalEuintXX` + `bytes calldata inputProof` + `FHE.fromExternal()`
+- **Branching**: always `FHE.select(ebool, a, b)` — never `if`/`require` on encrypted values
+- **Decryption**: user decryption is off-chain via EIP-712 + relayer SDK; public decryption uses `makePubliclyDecryptable()` + `checkSignatures()` callback
+
+---
+
 ## Detect user context
 
 Before generating code, determine the user's situation:
@@ -156,6 +199,7 @@ mkdir -p contracts test deploy frontend
 npm init -y
 npm install @fhevm/solidity@^0.11.1 @fhevm/mock-utils@^0.4.2 \
   @openzeppelin/contracts@^5.1.0 @openzeppelin/confidential-contracts@^0.4.0 \
+  @zama-fhe/relayer-sdk@^0.4.1 fhevm-contracts@^0.2.4 \
   encrypted-types@^0.0.4
 npm install -D @fhevm/hardhat-plugin@^0.4.2 hardhat@^2.28.4 \
   @nomicfoundation/hardhat-chai-matchers@^2.1.0 \
