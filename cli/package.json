@@ -1,0 +1,32 @@
+{
+  "name": "fhevm-setup",
+  "version": "1.0.1",
+  "description": "Install the FHEVM skill for AI agents (Kiro, Cursor, Windsurf, Copilot, Claude)",
+  "bin": {
+    "fhevm-setup": "dist/index.js"
+  },
+  "main": "./dist/index.js",
+  "scripts": {
+    "build": "tsc",
+    "dev": "ts-node src/index.ts",
+    "prepublishOnly": "npm run build"
+  },
+  "files": [
+    "dist",
+    "README.md"
+  ],
+  "dependencies": {
+    "commander": "12.1.0",
+    "fs-extra": "11.2.0",
+    "picocolors": "1.1.1"
+  },
+  "devDependencies": {
+    "@types/fs-extra": "11.0.4",
+    "@types/node": "20.14.0",
+    "typescript": "5.5.4"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "license": "MIT"
+}
