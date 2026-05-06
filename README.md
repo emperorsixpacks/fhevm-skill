@@ -123,6 +123,55 @@ Any agent that accepts a system prompt or custom instructions file will work —
 
 ---
 
+## Using the CLI
+
+The `fhevm-setup` CLI is published to npm — no install needed, just `npx`.
+
+### Install the skill into a workspace
+
+```bash
+# All agents at once (current directory)
+npx fhevm-setup install
+
+# Specific agent
+npx fhevm-setup install --agent kiro
+npx fhevm-setup install --agent cursor
+npx fhevm-setup install --agent windsurf
+npx fhevm-setup install --agent copilot
+npx fhevm-setup install --agent claude
+
+# Different workspace
+npx fhevm-setup install --agent kiro --workspace ~/projects/my-dapp
+
+# Also scaffold a ready-to-use Hardhat project into fhevm-project/
+npx fhevm-setup install --agent kiro --scaffold
+```
+
+### What each agent gets
+
+| Agent | File(s) written |
+|---|---|
+| `kiro` | `.kiro/skills/fhevm/` — full skill directory (SKILL.md + references + examples + templates) |
+| `cursor` | `.cursorrules` |
+| `windsurf` | `.windsurfrules` (appended) |
+| `copilot` | `.github/copilot-instructions.md` |
+| `claude` | SKILL.md contents printed to stdout — paste into Project Instructions |
+
+### `--scaffold` flag
+
+Copies the `templates/` Hardhat project into `fhevm-project/` in your workspace:
+
+```bash
+npx fhevm-setup install --scaffold
+cd fhevm-project
+cp .env.example .env   # add your private key + RPC URL
+npm install
+npx hardhat compile
+npx hardhat test
+```
+
+---
+
 ## Project scaffold
 
 The `templates/` directory is a ready-to-use Hardhat project:
