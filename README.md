@@ -20,7 +20,31 @@ Works with **Kiro**, **Claude**, **Cursor**, **Windsurf**, **Copilot**, and any 
 
 ## Setup by agent
 
-Start by cloning the repo:
+### Option 1 — CLI (recommended)
+
+```bash
+npx fhevm-setup install
+```
+
+This auto-detects nothing — you pick the agent:
+
+```bash
+npx fhevm-setup install --agent kiro      # Kiro
+npx fhevm-setup install --agent cursor    # Cursor
+npx fhevm-setup install --agent windsurf  # Windsurf
+npx fhevm-setup install --agent copilot   # GitHub Copilot
+npx fhevm-setup install --agent claude    # Claude (prints to stdout)
+npx fhevm-setup install                   # All agents at once
+```
+
+Add `--workspace /path/to/project` to target a specific directory (defaults to cwd).
+Add `--scaffold` to also copy the Hardhat project template into `fhevm-project/`.
+
+---
+
+### Option 2 — Manual
+
+Clone the repo first:
 
 ```bash
 git clone https://github.com/emperorsixpacks/fhevm-skill.git
@@ -126,6 +150,9 @@ npm test
 
 ```
 SKILL.md                        # The skill — inject this into your agent
+cli/                            # fhevm-setup CLI (published to npm)
+  src/                          # TypeScript source
+  package.json
 templates/
   contracts/                    # ConfidentialERC20, Voting, Auction, Invoice, Counter
   test/                         # Hardhat tests for each contract
